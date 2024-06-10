@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
+</head>
+<body>
+    <div id="app" class="app">
+        <h1>welkom bij mijn pagina over informatie over verschillende landen</h1>
+        <h1>druk op de knop om te beginnen</h1>
+        <button class="dropbtn" v-on:click="fetchData">landen</button>
+        <br>
+        <br>
+<div class="land">     
+<h2 id="land_show"></h2>
+<img id="image2" src="" alt="">
+<p id="hoofdstad"></p>
+<p id="beschrijving"></p>
+<p id="region"></p>
+
+</div>
+<br>
+<input type="text" id="myInput" v-on:keyup="searchbar()" placeholder="Zoek naar een land..." >
+<ul id="myUL">
+    <li v-for="data in data1"><button class="button1" v-on:click="landen(data)">{{data.name}}</button></li>
+ 
+    
+</ul>
+<br>
+<br>
+
+
+            
+            <!-- <div class="dropdown-content"> -->
+                <div class="row row1">
+                    
+             <!-- <button class="button1" v-for="data in data1" v-on:click=landen(data)>{{data.name}}</button> -->
+            </div>
+             
+                
+          
+        
+        
+    
+    </div>
+  
+    <script type="module">
+        const app = Vue.createApp({
+            data() {
+                return {
+            product: 'socks',
+            description: 'to put it over your foot',
+            image: "./assets/images/coding.png",
+            url: "./hallo.html",
+            Instock: true,
+            details: ['50% cotton', '30% fiber', '20% polyester'],
+            cart: 0,
+            data1: ''
+            
+                };
+            },
+            methods: {
+                searchbar() {
+                    var input, filter, ul, li, a, i, txtValue;
+                    input = document.getElementById("myInput");
+                    filter = input.value.toUpperCase();
+                    ul = document.getElementById("myUL");
+                    li = ul.getElementsByTagName("li");
+                    for (i = 0; i < li.length; i++) {
+                        a = li[i].getElementsByTagName("button")[0];
+                        txtValue = a.textContent || a.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                        } else {
+                        li[i].style.display = "none";
+                        }
+                }
+                },
+                
+                fetchData() {
+            axios.get('https://countryapi.io/api/all?apikey=dhu4HMNLykuiwCmN8uPFclM29t3JssO4xVaAM6tj')
+                .then(response => {
+                    console.log(response.data);
+                    this.data1 = response.data;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+                },
+                
+
+                landen(data) {
+                    // document.write(data.name)
+                   document.querySelector('#land_show').innerHTML = data.name
+                   document.querySelector('#beschrijving').innerHTML = data.name + " " + "heeft een populatie van: " + data.population
+                   document.getElementById('image2').src = data.flag['small']
+                   document.querySelector('#hoofdstad').innerHTML = "de hoofdstad van " + data.name + " " + "is: " + data.capital
+                   document.querySelector('#region').innerHTML = data.name + " ligt in " +data.region
+                }
+                
+
+                
+                    
+                    
+                }
+            }
+            
+        );
+
+        const mountedApp = app.mount("#app");
+    </script>
+</body>
+</html>
